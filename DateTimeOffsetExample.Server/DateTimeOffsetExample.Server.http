@@ -1,0 +1,6 @@
+@DateTimeOffsetExample.Server_HostAddress = http://localhost:5215
+
+GET {{DateTimeOffsetExample.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
