@@ -26,15 +26,15 @@ export default function TimeZoneAutoSelectBox() {
                         updateCurrentTimeZone(newValue?.id);
                         setDisplaySelectBox(false);
                     }
+                    console.log(event);
                 }}
                 size="small"
                 renderInput={(inputParams) => (
                 <TextField
                     {...inputParams}
-                    style={{ }} // Adjust the width to match the cell
                 />
             )}
-            sx={{ width: 300 }}
+            
         />
         ) : (
             <Button onClick={displayTimeZoneList}><PublicIcon sx={{ mr:1}}/>{currentTimeZone}</Button>

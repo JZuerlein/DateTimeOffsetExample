@@ -1,11 +1,10 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
-import { TimeZoneContext, TimeZoneProvider } from './TimeZoneProvider';
-import TimeZoneAutoSelectBox from './TimeZoneAutoSelectBox';
-import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { TimeZoneProvider } from './TimeZoneProvider';
+import { LocalizationProvider } from '@mui/x-date-pickers';
 import dayjs, { Dayjs } from 'dayjs';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { TimeZoneContextType } from './TimeZoneContextType';
+import DateTimeOffsetControl from './DateTimeOffsetControl';
 
 interface Forecast {
     date: string;
@@ -16,8 +15,7 @@ interface Forecast {
 
 function App() {
     const [forecasts, setForecasts] = useState<Forecast[]>();
-    const { currentTimeZone } = useContext(TimeZoneContext) as TimeZoneContextType;
-    const [value, setValue] = useState<Dayjs | null>(dayjs('2022-04-17T15:30'));
+    const [selectedDateTime, setSelectedDateTime] = useState<Dayjs | null>(dayjs('2022-04-17T15:30'));
 
     useEffect(() => {
         populateWeatherData();
@@ -52,12 +50,7 @@ function App() {
                 <div>
                     <h1 id="tableLabel">Weather forecast</h1>
                     <p>This component demonstrates fetching data from the server.</p>
-                    <TimeZoneAutoSelectBox/>
-                    <DateTimePicker
-                        label="Controlled picker"
-                        value={value ? dayjs.tz(new Date(value.date()), currentTimeZone) : null}
-                        onChange={(newValue) => setValue(newValue)}
-                        />
+                    <DateTimeOffsetControl selectedDateTime={selectedDateTime} onChange={setSelectedDateTime} />
                     {contents}
                 </div>
             </TimeZoneProvider>
@@ -65,7 +58,9 @@ function App() {
     );
 
     async function populateWeatherData() {
-        const response = await fetch('weatherforecast');
+        const encodedDateTimeOffset = encodeURIComponent(dayjs(selectedDateTime).tz().format('YYYY-MM-DDTHH:mm:ssZ'));
+        const response = await fetch('weatherforecast/byDateTimeOffset/' + encodedDateTimeOffset);
+        console.log(response);
         const data = await response.json();
         setForecasts(data);
     }
