@@ -32,7 +32,7 @@ namespace DateTimeOffsetExample.Server.Controllers
 
         [HttpGet("byDateTimeOffset/{dateTimeOffset}", Name = "GetWeatherForecastByDateTimeOffset")]
         public IEnumerable<WeatherForecast> GetByDateTimeOffset(DateTimeOffset dateTimeOffset)
-        {
+        {          
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = dateTimeOffset.AddDays(index),

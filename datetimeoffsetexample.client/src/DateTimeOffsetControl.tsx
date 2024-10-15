@@ -1,10 +1,10 @@
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { useContext } from "react";
 import { TimeZoneContextType } from "./TimeZoneContextType";
 import { TimeZoneContext } from "./TimeZoneProvider";
 import TimeZoneAutoSelectBox from "./TimeZoneAutoSelectBox";
-import { DateTimePicker } from "@mui/x-date-pickers";
-import { Typography } from "@mui/material";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { TextField, Typography } from "@mui/material";
 
 interface DateTimeOffsetControlProps {
     selectedDateTime: Dayjs | null;
@@ -13,21 +13,19 @@ interface DateTimeOffsetControlProps {
 
 function DateTimeOffsetControl({selectedDateTime, onChange} : DateTimeOffsetControlProps) {
     const { currentTimeZone } = useContext(TimeZoneContext) as TimeZoneContextType;
-    //const [value, setValue] = useState<Dayjs | null>(dayjs('2022-04-17T15:30'));
 
     return (
         <div>
             <TimeZoneAutoSelectBox/>
             <DateTimePicker
                 timezone={currentTimeZone}
-                label="Controlled picker"
+                label=""
                 value={selectedDateTime}
-                //onChange={newValue => {setValue(dayjs.tz(newValue));}}
-                onChange={onChange}
-                sx={{ mt: 2}}
+                onAccept={onChange}
+                sx={{ mt: 2 }} 
                 />
             <Typography sx={{ mt: 2 }}>
-                Stored value: {selectedDateTime == null ? 'null' : selectedDateTime.format()}
+                Stored value: {selectedDateTime == null ? 'null' : dayjs(selectedDateTime).tz().format('YYYY-MM-DDTHH:mm:ssZ')}
             </Typography>
         </div>
     )
